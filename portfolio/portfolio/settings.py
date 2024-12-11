@@ -126,7 +126,7 @@ STATIC_URL = 'static/'
 STATIC_URL = '/static/'
 STATIC_ROOT = BASE_DIR / 'staticfiles'  # Ensure 'BASE_DIR' is defined in your settings
 
-STATICFILES_DIRS = [BASE_DIR / "portfolio_app/static"]
+STATICFILES_DIRS = [BASE_DIR / "portfolio_app"/"static"]
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
 
