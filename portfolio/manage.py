@@ -18,5 +18,15 @@ def main():
     execute_from_command_line(sys.argv)
 
 
+    if "gunicorn" in sys.argv:
+        from gunicorn.app.wsgiapp import run
+        sys.argv = ["gunicorn", "portfolio.wsgi:application"]
+        run()
+    else:
+        from django.core.management import execute_from_command_line
+        execute_from_command_line(sys.argv)
+
+
+
 if __name__ == '__main__':
     main()
