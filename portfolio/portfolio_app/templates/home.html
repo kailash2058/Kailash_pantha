@@ -1,0 +1,189 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kailash Pantha</title>
+    <link rel="stylesheet" href="../static/css/styles.css">
+    <script src="https://kit.fontawesome.com/8ce6695331.js" crossorigin="anonymous"></script>
+    <link rel="icon" type="image/x-icon" href="/favicon/favicon.ico">
+</head>
+
+<body>
+    <div id="header">
+        <div class="container">
+            <nav>
+                <img src="images/kailash.png" class="logo">
+                <ul id="sidemenu">
+                    <li><a href="#header">Home</a></li>
+                    <li><a href="#about">About</a></li>
+                    <li><a href="#Expertise">Expertise</a></li>
+                    <li><a href="#portfolio">Portfolio</a></li>
+                    <li><a href="#contact">Contact</a></li>
+                    <i class="fa-solid fa-xmark" onclick="closemenu()"></i>
+                </ul>
+                <i class="fa-solid fa-bars" onclick="openmenu()"></i>
+            </nav>
+
+            
+            <div class="header-text">
+                <p id="text1">I'm a Student, </p>
+                <p id="text2">Learner and </p>
+                <p id="text3">AI Enthusiast. </p>
+                <h1>Hi, I'm <span>Kailash Pantha</span> <br>from Nepal</h1>
+            </div>
+        </div>
+    </div>
+
+    <!-- About Section -->
+    <div id="about">
+        <div class="container">
+            <div class="row">
+                <div class="about-col-1">
+                    <img src="images/kailash.jpg">
+                </div>
+                <div class="about-col-2">
+                    <h1 class="sub-title">About Me</h1>
+                    <p>
+                        Hello! I’m Kailash Pantha, a passionate AI and ML enthusiast with a strong foundation in
+                        electronics and information engineering. I enjoy working on projects that merge AI with practical
+                        applications and am driven to make meaningful contributions through data-driven insights and
+                        innovative technology solutions.
+                    </p>
+                    <div class="tab-titles">
+                        <p class="tab-links active-link" onclick="opentab('skills')">Skills</p>
+                        <p class="tab-links" onclick="opentab('experience')">Experience</p>
+                        <p class="tab-links" onclick="opentab('education')">Education</p>
+                    </div>
+                    <div class="tab-contents active-tab" id="skills">
+                        <ul>
+                            <li><span>Programming Languages:</span> C/C++ (Embedded), Python (ML, Data Science), SQL</li>
+                            <li><span>Data Science:</span> TensorFlow, Scikit-learn, Keras, Pandas, EDA</li>
+                            <li><span>Data Engineering:</span> AWS, ETL, Data Modeling</li>
+                            <li><span>Machine Learning:</span> PyTorch, TensorFlow, CNNs, RNNs</li>
+                            <li><span>Embedded Systems:</span> Raspberry Pi, Arduino, STM32</li>
+                        </ul>
+                    </div>
+                    <div class="tab-contents" id="experience">
+                        <ul>
+                            <li><span>Robotics Club, Pulchowk:</span> Core Member, managed resources and programmed robots</li>
+                            <li><span>IEEE Pulchowk Branch:</span> Secretary and Vice Secretary roles</li>
+                            <li><span>Hult Prize:</span> Outreach Manager, 2023-present</li>
+                        </ul>
+                    </div>
+                    <div class="tab-contents" id="education">
+                        <ul>
+                            <li><span>Bachelor's Degree in Electronics, Communication, and Information Engineering:</span>
+                                Pulchowk Campusmy</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Services Section -->
+    <div id="Expertise">
+        <div class="container">
+            <h1 class="sub-title">My Expertise</h1>
+            <div class="services-list">
+                <div>
+                    <i class="fa-solid fa-robot"></i>
+                    <h2>AI and Machine Learning</h2>
+                    <p>Developing machine learning models for data analysis, image recognition, and predictive analytics.</p>
+                </div>
+                <div>
+                    <i class="fa-solid fa-database"></i>
+                    <h2>Data Engineering</h2>
+                    <p>Designing data pipelines and data models for efficient data management and analytics.</p>
+                </div>
+                <div>
+                    <i class="fa-solid fa-microchip"></i>
+                    <h2>Embedded Systems</h2>
+                    <p>Developing IoT solutions using Raspberry Pi, Arduino, and STM32 controllers for automation and sensor applications.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Portfolio Section -->
+    <div id="portfolio">
+        <div class="container">
+            <h1 class="sub-title">My Projects</h1>
+            <div class="work-list">
+                <div class="work">
+                    <img src="images/deepfake.jpg" alt="Deep Fake Detection">
+                    <div class="layer">
+                        <h3>Deep Fake Detection</h3>
+                        <p>Using CNNs and Mesonet-4 architecture for deep fake detection in images and videos.</p>
+                    </div>
+                </div>
+                <div class="work">
+                    <img src="images/thermal.jpg" alt="Thermal Imaging">
+                    <div class="layer">
+                        <h3>Thermal Imaging Human Detection</h3>
+                        <p>Human detection with YOLOv8 for security and automation applications.</p>
+                    </div>
+                </div>
+                <div class="work">
+                    <img src="images/stock.jpg" alt="Stock Prediction">
+                    <div class="layer">
+                        <h3>Stock Price Prediction</h3>
+                        <p>RNN/LSTM models for time-series analysis in stock price prediction.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Contact Section -->
+    <div id="contact">
+        <div class="container">
+            <div class="row">
+                <div class="contact-left">
+                    <h1 class="sub-title">Contact Me</h1>
+                    <p><i class="fa-solid fa-paper-plane"></i>076bei017.kailash@pcampus.edu.np</p>
+                    <p><i class="fa-solid fa-square-phone"></i>+977-9861882512</p>
+                    <div class="social-icons">
+                        <a href="https://www.linkedin.com/in/kailash-pantha-09521919b/"><i class="fa-brands fa-linkedin"></i></a>
+                        <a href="https://github.com/kailash2058"><i class="fa-brands fa-github"></i></a>
+                        <a href="https://www.facebook.com/pantha.kailash"><i class="fa-brands fa-facebook"></i></a>
+                        <a href="https://www.instagram.com/kailash_pantha/"><i class="fa-brands fa-instagram"></i></a>
+                        
+                    </div>
+                </div>
+                <div class="contact-right">
+                    <form method="POST" action="{% url 'contact' %}">
+                        {% csrf_token %}
+                        <input type="text" name="name" placeholder="Your Name" required>
+                        <input type="email" name="email" placeholder="Your Email" required>
+                        <textarea name="message" rows="6" placeholder="Your Message"></textarea>
+                        <button type="submit" class="btn btn2">Submit</button>
+                    </form>
+                    <span id="msg"></span>
+                </div>
+                
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function opentab(tabname) {
+            var tablinks = document.getElementsByClassName("tab-links");
+            var tabcontents = document.getElementsByClassName("tab-contents");
+            for (let tablink of tablinks) tablink.classList.remove("active-link");
+            for (let tabcontent of tabcontents) tabcontent.classList.remove("active-tab");
+            event.currentTarget.classList.add("active-link");
+            document.getElementById(tabname).classList.add("active-tab");
+        }
+    </script>
+    <script>
+        var sidemenu = document.getElementById("sidemenu");
+        function openmenu() { sidemenu.style.right = "0"; }
+        function closemenu() { sidemenu.style.right = "-200px"; }
+    </script>
+</body>
+</html>
