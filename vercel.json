@@ -8,7 +8,7 @@
     ],
     "routes": [
         {
-            "src": "/portfolio/portfolio_app/static/(.*)",
+            "src": "/static/(.*)",
             "dest": "/portfolio/portfolio_app/static/$1"
         },     
         {
