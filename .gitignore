@@ -8,7 +8,7 @@ my_env/
 env/
 
 # Django Static Files
-staticfiles/
+# staticfiles/
 
 # Secrets
 *.env

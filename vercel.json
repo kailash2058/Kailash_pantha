@@ -9,11 +9,11 @@
     "routes": [
         {
             "src": "/static/(.*)",
-            "dest": "/static/$1"
+            "dest": "/portfolio/static/$1"
         },
         {
             "src": "/(.*)",
-            "dest": "portfolio/wsgi.py"
+            "dest": "portfolio/portfolio/wsgi.py"
         }
     ]
 }
