@@ -3,12 +3,12 @@
     "builds": [
         {
             "src": "portfolio/portfolio/wsgi.py",
-            "use": "@vercel/python"
+            "use": "@vercel/python3"
         }
     ],
     "routes": [
         {
-            "src": "/static/(.*)",
+            "src": "/portfolio/portfolio_app/static/(.*)",
             "dest": "/portfolio/portfolio_app/static/$1"
         },     
         {
