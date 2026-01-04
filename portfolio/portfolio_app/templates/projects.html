@@ -1,0 +1,126 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>All Projects - Portfolio</title>
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+    <script src="https://kit.fontawesome.com/8ce6695331.js" crossorigin="anonymous"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        /* small overrides to ensure navbar sits above content */
+        body{padding-top:64px}
+        .container{max-width:1100px;margin:0 auto;padding:0 1rem}
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="container nav-container">
+            <div class="nav-brand"><span class="brand-name">KP.</span></div>
+            <ul class="nav-menu">
+                <li><a href="{% url 'home' %}#home" class="nav-link">Home</a></li>
+                <li><a href="{% url 'home' %}#about" class="nav-link">About</a></li>
+                <li><a href="{% url 'home' %}#expertise" class="nav-link">Skills</a></li>
+                <li><a href="{% url 'home' %}#projects" class="nav-link">Projects</a></li>
+                <li><a href="{% url 'home' %}#blog" class="nav-link">Blog</a></li>
+                <li><a href="{% url 'home' %}#events" class="nav-link">Events</a></li>
+                <li><a href="{% url 'home' %}#contact" class="nav-link">Contact</a></li>
+            </ul>
+            <div style="display:flex;align-items:center;gap:.5rem;">
+                <button id="themeToggle" class="theme-btn" aria-pressed="false" aria-label="Toggle dark mode"><i id="themeIcon" class="fa-solid fa-moon"></i></button>
+            </div>
+        </div>
+    </nav>
+
+    <main class="container">
+        <h1>All Projects</h1>
+        <p>This page lists all projects. Replace placeholder entries with real project data or a database-driven list.</p>
+        <div class="projects-grid">
+            <div class="project-card">
+                <div class="project-info">
+                    <h3>Thermal Imaging–Based Human Detection System</h3>
+                    <p>Built a real-time human detection system using thermal imagery for reliable surveillance in low-visibility environments. Runs on edge hardware with GPS tagging.</p>
+                    <p><strong>Tech:</strong> Python, YOLOv8, OpenCV, FLIR Lepton, Raspberry Pi, GPS</p>
+                    <a href="#" class="project-link">GitHub →</a>
+                </div>
+            </div>
+
+            <div class="project-card">
+                <div class="project-info">
+                    <h3>SmartDocBot — Document-Aware Conversational Agent</h3>
+                    <p>Intelligent chatbot answering document-based queries and scheduling appointments with robust date parsing and validation. Integrated a RAG pipeline for accurate retrieval.</p>
+                    <p><strong>Tech:</strong> Python, Gemini, RAG, Streamlit, Pinecone</p>
+                    <a href="#" class="project-link">GitHub →</a>
+                </div>
+            </div>
+
+            <div class="project-card">
+                <div class="project-info">
+                    <h3>Deepfake Detection System (MesoNet-4)</h3>
+                    <p>CNN-based deepfake detection system to identify manipulated images and videos by analyzing spatial inconsistencies.</p>
+                    <p><strong>Tech:</strong> Python, TensorFlow, Keras, OpenCV, NumPy</p>
+                    <a href="#" class="project-link">GitHub →</a>
+                </div>
+            </div>
+
+            <div class="project-card">
+                <div class="project-info">
+                    <h3>Speech Content Analysis System</h3>
+                    <p>Modular NLP pipeline to analyze speeches from YouTube videos and PDFs, generating topic-specific analytical reports with multilingual support. Deployed as an API-driven system.</p>
+                    <p><strong>Tech:</strong> OpenAI LLMs, Sentence Transformers, YouTube API, Google Translate, FastAPI</p>
+                    <a href="#" class="project-link">GitHub →</a>
+                </div>
+            </div>
+
+            <div class="project-card">
+                <div class="project-info">
+                    <h3>KISSAN — Automated Drip Irrigation System</h3>
+                    <p>Embedded system that automates irrigation by monitoring soil moisture and environmental conditions, optimizing water usage for agriculture.</p>
+                    <p><strong>Tech:</strong> ATmega328P, Soil Moisture Sensor, DHT11, Embedded C, L293D</p>
+                    <a href="#" class="project-link">Project Details →</a>
+                </div>
+            </div>
+
+            <div class="project-card">
+                <div class="project-info">
+                    <h3>Drone-Powered Object Detection System</h3>
+                    <p>Integrated a YOLO-based object detection model with a drone platform to perform real-time aerial object detection.</p>
+                    <p><strong>Tech:</strong> DJI Tello, YOLOv5</p>
+                    <a href="#" class="project-link">GitHub →</a>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        // Theme toggle logic (keeps behavior consistent with home page)
+        const themeToggle = document.getElementById('themeToggle');
+        const themeIcon = document.getElementById('themeIcon');
+        const userPref = localStorage.getItem('theme');
+        function applyTheme(theme){
+            if(theme === 'dark'){
+                document.documentElement.classList.add('dark-mode');
+                themeIcon.className = 'fa-solid fa-sun';
+                themeToggle.setAttribute('aria-pressed','true');
+                themeToggle.setAttribute('aria-label','Switch to light mode');
+            } else {
+                document.documentElement.classList.remove('dark-mode');
+                themeIcon.className = 'fa-solid fa-moon';
+                themeToggle.setAttribute('aria-pressed','false');
+                themeToggle.setAttribute('aria-label','Switch to dark mode');
+            }
+        }
+        if(userPref){ applyTheme(userPref); }
+        else if(window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches){ applyTheme('dark'); }
+        else { applyTheme('light'); }
+        themeToggle.addEventListener('click', () => {
+            const isDark = document.documentElement.classList.contains('dark-mode');
+            const next = isDark ? 'light' : 'dark';
+            applyTheme(next);
+            localStorage.setItem('theme', next);
+        });
+    </script>
+</body>
+</html>
