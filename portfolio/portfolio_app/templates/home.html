@@ -39,21 +39,26 @@
         .nav-link:hover { background: rgba(0,0,0,0.05); }
 
         /* Toggle buttons hidden on desktop */
-        .nav-toggle, .nav-close { display:none; background:transparent; border:0; cursor:pointer; font-size:1.2rem; }
+        .nav-toggle { display:none; background:transparent; border:0; cursor:pointer; font-size:1.2rem; z-index:1400; }
+        .nav-close { display:none; background:transparent; border:0; cursor:pointer; font-size:1.4rem; color:var(--color-text-primary); z-index:1500; }
 
         /* Mobile behavior */
         @media (max-width: 900px) {
             .nav-toggle { display:block; }
-            .nav-menu { position: fixed; right: -100%; top: 0; height: 100vh; width: 260px; flex-direction: column; padding: 1.25rem; background: linear-gradient(180deg,var(--color-bg-primary),var(--color-bg-secondary)); box-shadow: -6px 0 24px rgba(35,38,41,0.07); gap:1rem; transition: right .28s ease; }
+            /* slide menu using transform for reliable behavior */
+            .nav-menu { position: fixed; right: 0; top: 0; height: 100vh; width: 280px; flex-direction: column; padding: 1.25rem; background: linear-gradient(180deg,var(--color-bg-primary),var(--color-bg-secondary)); box-shadow: -6px 0 24px rgba(35,38,41,0.07); gap:1rem; transition: transform .28s ease; transform: translateX(110%); z-index:1300; }
             .dark-mode .nav-menu{ background: linear-gradient(180deg,#071124,#071a2a); }
-            .nav-menu.active { right: 0; }
-            .nav-close { display:block; align-self:flex-end; }
+            .nav-menu.active { transform: translateX(0); }
+            /* nav close button placed at top-right above menu */
+            .nav-close { display:block; position: fixed; right: 0.5rem; top: 0.6rem; z-index:1500; background:transparent; padding:0.45rem; border-radius:6px; }
             .nav-menu li { width:100%; }
             .nav-link { display:block; width:100%; padding:0.75rem 0.5rem; }
         }
 
         /* Make room for fixed nav */
         body { padding-top: 64px; transition: background .25s, color .25s; }
+        /* Prevent background scroll when mobile nav is open */
+        body.nav-open { overflow: hidden; }
         .hero { padding-top: 40px; padding-bottom: 80px; }
         .container { max-width: 1100px; margin: 0 auto; padding: 0 1rem; }
 
@@ -106,18 +111,19 @@
                 <li><a href="#blog" class="nav-link">Blog</a></li>
                 <li><a href="#events" class="nav-link">Events</a></li>
                 <li><a href="#contact" class="nav-link">Contact</a></li>
-                <button class="nav-close" onclick="closeMenu()" aria-label="Close menu"><i class="fa-solid fa-xmark"></i></button>
             </ul>
             <div style="display:flex; align-items:center; gap:0.5rem;">
-                <button class="nav-toggle" onclick="openMenu()" aria-label="Open menu"><i class="fa-solid fa-bars"></i></button>
+                <button class="nav-toggle" aria-label="Open menu"><i class="fa-solid fa-bars"></i></button>
 
                 <!-- Theme toggle (dark / light) -->
                 <button id="themeToggle" class="theme-btn" aria-pressed="false" aria-label="Toggle dark mode">
                     <i id="themeIcon" class="fa-solid fa-moon"></i>
                 </button>
             </div>
-        </div>
-    </nav>
+            <!-- mobile close button (sibling to menu) -->
+            <button class="nav-close" aria-label="Close menu"><i class="fa-solid fa-xmark"></i></button>
+         </div>
+     </nav>
 
     <main id="main">
     <!-- Hero Section -->
@@ -424,44 +430,48 @@
         <div class="container">
             <div class="section-label">LATEST ARTICLES</div>
             <h2 class="section-title">Blog & Articles</h2>
-            <div class="blog-grid">
-                <div class="blog-card">
-                    <div class="blog-image">
-                        <img src="https://via.placeholder.com/400x250?text=Getting+Started+with+React" alt="Getting Started with React Hooks">
-                    </div>
-                    <div class="blog-content">
-                        <span class="blog-category">React</span>
-                        <span class="blog-date">January 15, 2025</span>
-                        <h3>Getting Started with React Hooks</h3>
-                        <p>Learn how to use React Hooks to manage state and side effects in your functional components effectively.</p>
-                        <a href="#" class="blog-link">Read More →</a>
-                    </div>
-                </div>
 
-                <div class="blog-card">
-                    <div class="blog-image">
-                        <img src="https://via.placeholder.com/400x250?text=Understanding+TypeScript" alt="Understanding TypeScript Generics">
-                    </div>
-                    <div class="blog-content">
-                        <span class="blog-category">TypeScript</span>
-                        <span class="blog-date">January 10, 2025</span>
-                        <h3>Understanding TypeScript Generics</h3>
-                        <p>A comprehensive guide to writing reusable and type-safe TypeScript code using generics and advanced types.</p>
-                        <a href="#" class="blog-link">Read More →</a>
-                    </div>
-                </div>
+            <style>
+                /* small gallery preview for home */
+                .blog-grid { display:grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap:1rem; }
+                .blog-card { display:flex; flex-direction:column; background:var(--color-bg-secondary); border-radius:10px; overflow:hidden; }
+                .blog-image img{ width:100%; height:160px; object-fit:cover; display:block; }
+                .photo-gallery { display:grid; grid-template-columns: repeat(3,1fr); gap:6px; margin-top:1rem; }
+                .photo-gallery img{ width:100%; height:88px; object-fit:cover; border-radius:6px; }
+            </style>
 
-                <div class="blog-card">
-                    <div class="blog-image">
-                        <img src="https://via.placeholder.com/400x250?text=Building+Scalable+Applications" alt="Building Scalable Applications">
-                    </div>
-                    <div class="blog-content">
-                        <span class="blog-category">Backend</span>
-                        <span class="blog-date">January 5, 2025</span>
-                        <h3>Building Scalable Applications</h3>
-                        <p>Best practices for architecting and deploying production-ready applications with performance in mind.</p>
-                        <a href="#" class="blog-link">Read More →</a>
-                    </div>
+            <div class="blog-grid" id="homeBlogGrid">
+                <!-- Will be populated from /blogs/ (first 3 articles) -->
+            </div>
+
+            <script>
+                (function(){
+                    const container = document.getElementById('homeBlogGrid');
+                    if(!container) return;
+                    const blogsUrl = "{% url 'blogs_all' %}";
+                    fetch(blogsUrl, { credentials: 'same-origin' })
+                        .then(resp => resp.text())
+                        .then(html => {
+                            const parser = new DOMParser();
+                            const doc = parser.parseFromString(html, 'text/html');
+                            const articles = doc.querySelectorAll('.blog-card');
+                            for(let i=0;i<Math.min(3, articles.length); i++){
+                                const node = articles[i].cloneNode(true);
+                                // remove internal <style> tags if any
+                                container.appendChild(node);
+                            }
+                        })
+                        .catch(()=>{ container.innerHTML = '<p>Unable to load articles.</p>'; });
+                })();
+            </script>
+
+            <!-- small photo gallery preview -->
+            <div style="margin-top:1rem;">
+                <div class="section-label">TRAVEL PHOTOS</div>
+                <div class="photo-gallery">
+                    <img src="https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?w=800&q=80&auto=format&fit=crop" alt="photo1">
+                    <img src="https://images.unsplash.com/photo-1504198453319-5ce911bafcde?w=800&q=80&auto=format&fit=crop" alt="photo2">
+                    <img src="https://images.unsplash.com/photo-1491553895911-0055eca6402d?w=800&q=80&auto=format&fit=crop" alt="photo3">
                 </div>
             </div>
 
@@ -611,29 +621,68 @@
     <!-- Theme is controlled by the toggle in the navbar; preference persisted in localStorage -->
 
     <script>
-        // Toggle menu by adding/removing a class instead of manipulating inline styles
+        // Robust mobile nav and theme script
         const navMenu = document.getElementById('navMenu');
         const navToggle = document.querySelector('.nav-toggle');
+        const navClose = document.querySelector('.nav-close');
+        const themeToggle = document.getElementById('themeToggle');
+        const themeIcon = document.getElementById('themeIcon');
 
-        function openMenu() {
-            navMenu.classList.add('active');
-            document.body.classList.add('nav-open');
+        // Initialize ARIA and state
+        if (navMenu) {
+            navMenu.setAttribute('aria-hidden', 'true');
         }
-        function closeMenu() {
-            navMenu.classList.remove('active');
-            document.body.classList.remove('nav-open');
+        if (navToggle) {
+            navToggle.setAttribute('aria-expanded', 'false');
+        }
+        if (navClose) {
+            navClose.setAttribute('aria-hidden', 'true');
         }
 
-        // Close menu when clicking outside on mobile
-        document.addEventListener('click', function (e) {
-            if (!navMenu.classList.contains('active')) return;
-            const target = e.target;
-            if (!navMenu.contains(target) && !navToggle.contains(target)) {
-                closeMenu();
-            }
+        function setMenuState(open) {
+            if (!navMenu) return;
+            navMenu.classList.toggle('active', open);
+            document.body.classList.toggle('nav-open', open);
+            navMenu.setAttribute('aria-hidden', String(!open));
+            if (navToggle) navToggle.setAttribute('aria-expanded', String(open));
+            if (navClose) navClose.setAttribute('aria-hidden', String(!open));
+        }
+
+        // Toggle behavior for hamburger
+        if (navToggle) {
+            navToggle.addEventListener('click', function (e) {
+                e.stopPropagation();
+                const isOpen = navMenu && navMenu.classList.contains('active');
+                setMenuState(!isOpen);
+            });
+        }
+
+        // Close button inside mobile UI
+        if (navClose) {
+            navClose.addEventListener('click', function (e) {
+                e.stopPropagation();
+                setMenuState(false);
+            });
+        }
+
+        // Close on Escape
+        document.addEventListener('keydown', function (e) {
+            if (e.key === 'Escape') setMenuState(false);
         });
 
-        // Smooth scrolling for anchor links (only for internal hashes)
+        // Close when clicking or touching outside the menu
+        function outsideClickHandler(e) {
+            if (!navMenu || !navMenu.classList.contains('active')) return;
+            const target = e.target;
+            if (navMenu.contains(target)) return;
+            if (navToggle && (navToggle.contains(target) || navToggle === target)) return;
+            if (navClose && (navClose.contains(target) || navClose === target)) return;
+            setMenuState(false);
+        }
+        document.addEventListener('click', outsideClickHandler);
+        document.addEventListener('touchstart', outsideClickHandler);
+
+        // Smooth scrolling for internal anchors
         document.querySelectorAll('a[href^="#"]').forEach(anchor => {
             anchor.addEventListener('click', function (e) {
                 const hash = this.getAttribute('href');
@@ -641,47 +690,37 @@
                 const target = document.querySelector(hash);
                 if (target) {
                     e.preventDefault();
-                    closeMenu();
+                    setMenuState(false);
                     target.scrollIntoView({ behavior: 'smooth', block: 'start' });
                 }
             });
         });
 
-        // Theme toggle logic
-        const themeToggle = document.getElementById('themeToggle');
-        const themeIcon = document.getElementById('themeIcon');
+        // Theme toggle logic (persisted in localStorage)
         const userPref = localStorage.getItem('theme');
-
         function applyTheme(theme){
             if(theme === 'dark'){
                 document.documentElement.classList.add('dark-mode');
-                themeIcon.className = 'fa-solid fa-sun';
-                themeToggle.setAttribute('aria-pressed','true');
-                themeToggle.setAttribute('aria-label','Switch to light mode');
+                if(themeIcon) themeIcon.className = 'fa-solid fa-sun';
+                if(themeToggle) { themeToggle.setAttribute('aria-pressed','true'); themeToggle.setAttribute('aria-label','Switch to light mode'); }
             } else {
                 document.documentElement.classList.remove('dark-mode');
-                themeIcon.className = 'fa-solid fa-moon';
-                themeToggle.setAttribute('aria-pressed','false');
-                themeToggle.setAttribute('aria-label','Switch to dark mode');
+                if(themeIcon) themeIcon.className = 'fa-solid fa-moon';
+                if(themeToggle) { themeToggle.setAttribute('aria-pressed','false'); themeToggle.setAttribute('aria-label','Switch to dark mode'); }
             }
         }
 
-        // Initialize from localStorage or system preference
-        if(userPref){
-            applyTheme(userPref);
-        } else if(window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches){
-            applyTheme('dark');
-        } else {
-            applyTheme('light');
-        }
+        if(userPref){ applyTheme(userPref); }
+        else if(window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches){ applyTheme('dark'); }
+        else { applyTheme('light'); }
 
-        themeToggle.addEventListener('click', () => {
+        if (themeToggle) themeToggle.addEventListener('click', function () {
             const isDark = document.documentElement.classList.contains('dark-mode');
             const next = isDark ? 'light' : 'dark';
             applyTheme(next);
             localStorage.setItem('theme', next);
         });
-
     </script>
+
 </body>
 </html>

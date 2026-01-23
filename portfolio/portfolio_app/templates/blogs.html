@@ -33,24 +33,33 @@
     <main class="container">
         <h1>All Articles</h1>
         <p>Full list of blog posts and articles.</p>
-        <div class="blog-grid">
-            <div class="blog-card">
-                <div class="blog-content">
-                    <h3>Getting Started with React Hooks</h3>
-                    <p>January 15, 2025 — React</p>
+        <style>
+            .blogs-grid { display:grid; grid-template-columns: repeat(auto-fit, minmax(280px,1fr)); gap:1rem; }
+            .blog-card { background:var(--color-bg-secondary); border-radius:8px; overflow:hidden; }
+            .blog-card .blog-image img{ width:100%; height:180px; object-fit:cover; display:block; }
+            .travel-gallery { display:grid; grid-template-columns: repeat(3,1fr); gap:6px; margin-top:1rem; }
+            .travel-gallery img{ width:100%; height:110px; object-fit:cover; border-radius:6px; }
+        </style>
+        <div class="blogs-grid">
+            {% include 'partials/blog_preview.html' %}
+            <!-- Full listing keeps travel feature as a separate full card -->
+            <article class="blog-card">
+                <div class="blog-image"><img src="https://images.unsplash.com/photo-1501785888041-af3ef285b470?w=1200&q=80&auto=format&fit=crop" alt="Kathmandu"></div>
+                <div class="blog-content" style="padding:1rem;">
+                    <h3>Kathmandu: Streets, Food &amp; Mountains</h3>
+                    <p class="muted">December 20, 2024 — Travel</p>
+                    <p>A photo-first travel journal from recent trips around Kathmandu, capturing culture, food, and mountain views.</p>
+                    <a href="#" class="blog-link">Read Travel Blog →</a>
                 </div>
-            </div>
-            <div class="blog-card">
-                <div class="blog-content">
-                    <h3>Understanding TypeScript Generics</h3>
-                    <p>January 10, 2025 — TypeScript</p>
-                </div>
-            </div>
-            <div class="blog-card">
-                <div class="blog-content">
-                    <h3>Building Scalable Applications</h3>
-                    <p>January 5, 2025 — Backend</p>
-                </div>
+            </article>
+        </div>
+
+        <div style="margin-top:1.25rem;">
+            <div class="section-label">TRAVEL PHOTOS</div>
+            <div class="travel-gallery">
+                <img src="https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?w=800&q=80&auto=format&fit=crop" alt="travel1">
+                <img src="https://images.unsplash.com/photo-1504198453319-5ce911bafcde?w=800&q=80&auto=format&fit=crop" alt="travel2">
+                <img src="https://images.unsplash.com/photo-1491553895911-0055eca6402d?w=800&q=80&auto=format&fit=crop" alt="travel3">
             </div>
         </div>
     </main>

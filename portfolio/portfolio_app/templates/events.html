@@ -38,21 +38,48 @@
                 <div class="event-info">
                     <h3>Web Development Workshop</h3>
                     <p>February 20, 2025 — Tech Hub, Karachi</p>
+                    <a href="#" class="event-link">Read More →</a>
                 </div>
             </div>
             <div class="event-card">
                 <div class="event-info">
                     <h3>JavaScript Fundamentals Bootcamp</h3>
                     <p>March 5, 2025 — Innovation Center, Lahore</p>
+                    <a href="#" class="event-link">Read More →</a>
                 </div>
             </div>
             <div class="event-card">
                 <div class="event-info">
                     <h3>AI & Machine Learning Seminar</h3>
                     <p>March 15, 2025 — Tech Auditorium, Islamabad</p>
+                    <a href="#" class="event-link">Read More →</a>
                 </div>
             </div>
         </div>
+
+        <!-- Event modal (reusable) -->
+        <div id="eventModal" class="modal" aria-hidden="true">
+            <div class="modal-backdrop"></div>
+            <div class="modal-dialog" role="dialog" aria-modal="true">
+                <button class="modal-close" aria-label="Close event">&times;</button>
+                <img class="modal-image" src="" alt="Event image" />
+                <h2 class="modal-title"></h2>
+                <div class="modal-meta"></div>
+                <div class="modal-body"></div>
+            </div>
+        </div>
+
+        <style>
+            /* Event modal styles (small) */
+            .modal { position:fixed; inset:0; display:none; align-items:center; justify-content:center; z-index:2000; }
+            .modal[aria-hidden="false"] { display:flex; }
+            .modal-backdrop { position:fixed; inset:0; background:rgba(2,6,23,0.6); }
+            .modal-dialog { position:relative; max-width:720px; max-height:86vh; overflow:auto; background:var(--color-bg-primary); color:var(--color-text-primary); border-radius:10px; padding:1rem 1.25rem; box-shadow:0 20px 60px rgba(2,6,23,0.4); z-index:2100; }
+            .modal-image{ width:100%; height:260px; object-fit:cover; border-radius:8px; margin-bottom:.75rem; }
+            .modal-close { position:absolute; right:0.5rem; top:0.5rem; background:transparent; border:0; font-size:1.6rem; color:var(--color-text-primary); cursor:pointer; }
+            .modal-meta { color:var(--color-accent-primary); font-size:0.9rem; margin-bottom:0.5rem; }
+            .modal-body p{ line-height:1.6; margin-bottom:0.75rem; }
+        </style>
     </main>
 
     <script>
@@ -81,6 +108,59 @@
             applyTheme(next);
             localStorage.setItem('theme', next);
         });
+        
+        // Event modal logic: open when .event-link is clicked
+        (function(){
+            const modal = document.getElementById('eventModal');
+            const modalImage = modal?.querySelector('.modal-image');
+            const modalTitle = modal?.querySelector('.modal-title');
+            const modalMeta = modal?.querySelector('.modal-meta');
+            const modalBody = modal?.querySelector('.modal-body');
+            const modalClose = modal?.querySelector('.modal-close');
+
+            function openEvent(card){
+                if(!modal) return;
+                const title = card.querySelector('h3')?.innerText || 'Event';
+                const meta = card.querySelector('p')?.innerText || '';
+                const img = card.querySelector('img')?.src || '';
+                const summary = card.querySelector('p')?.innerText || '';
+
+                modalTitle.textContent = title;
+                modalMeta.textContent = meta;
+                if(img){ modalImage.src = img; modalImage.style.display = ''; } else { modalImage.style.display = 'none'; }
+
+                modalBody.innerHTML = `
+                    <p>${summary}</p>
+                    <p>This is a detailed journal-style writeup about the event. It includes observations, takeaways, and practical notes from the session.</p>
+                    <p>Speakers: Jane Doe, John Smith. Topics covered: responsive design, accessibility, progressive enhancement, performance tuning.</p>
+                    <p>Key takeaways: document learning objectives, produce concise examples, and follow up with attendees via a shared repository.</p>
+                `;
+
+                modal.setAttribute('aria-hidden','false');
+                document.body.classList.add('modal-open');
+                modalClose?.focus();
+            }
+
+            function closeEvent(){
+                if(!modal) return;
+                modal.setAttribute('aria-hidden','true');
+                document.body.classList.remove('modal-open');
+            }
+
+            document.addEventListener('click', function(e){
+                const target = e.target;
+                if(target.matches('.event-link') || target.closest('.event-link')){
+                    e.preventDefault();
+                    const link = target.closest('.event-link') || target;
+                    const card = link.closest('.event-card');
+                    if(card) openEvent(card);
+                }
+            });
+
+            modalClose?.addEventListener('click', closeEvent);
+            modal?.addEventListener('click', function(e){ if(e.target.classList.contains('modal-backdrop')) closeEvent(); });
+            document.addEventListener('keydown', function(e){ if(e.key==='Escape') closeEvent(); });
+        })();
     </script>
 </body>
 </html>
