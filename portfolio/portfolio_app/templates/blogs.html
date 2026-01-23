@@ -41,8 +41,36 @@
             .travel-gallery img{ width:100%; height:110px; object-fit:cover; border-radius:6px; }
         </style>
         <div class="blogs-grid">
-            {% include 'partials/blog_preview.html' %}
-            <!-- Full listing keeps travel feature as a separate full card -->
+            <article class="blog-card">
+                <div class="blog-image"><img src="https://images.unsplash.com/photo-1508921912186-1d1a45ebb3c1?w=1200&q=80&auto=format&fit=crop" alt="React Hooks"></div>
+                <div class="blog-content" style="padding:1rem;">
+                    <h3>Getting Started with React Hooks</h3>
+                    <p class="muted">January 15, 2025 — React</p>
+                    <p>Learn how to use React Hooks to manage state and side effects in your functional components effectively.</p>
+                    <a href="#" class="blog-link">Read More →</a>
+                </div>
+            </article>
+
+            <article class="blog-card">
+                <div class="blog-image"><img src="https://images.unsplash.com/photo-1515879218367-8466d910aaa4?w=1200&q=80&auto=format&fit=crop" alt="TypeScript"></div>
+                <div class="blog-content" style="padding:1rem;">
+                    <h3>Understanding TypeScript Generics</h3>
+                    <p class="muted">January 10, 2025 — TypeScript</p>
+                    <p>A comprehensive guide to writing reusable and type-safe TypeScript code using generics and advanced types.</p>
+                    <a href="#" class="blog-link">Read More →</a>
+                </div>
+            </article>
+
+            <article class="blog-card">
+                <div class="blog-image"><img src="https://images.unsplash.com/photo-1472214103451-9374bd1c798e?w=1200&q=80&auto=format&fit=crop" alt="Scalable Apps"></div>
+                <div class="blog-content" style="padding:1rem;">
+                    <h3>Building Scalable Applications</h3>
+                    <p class="muted">January 5, 2025 — Backend</p>
+                    <p>Best practices for architecting and deploying production-ready applications with performance in mind.</p>
+                    <a href="#" class="blog-link">Read More →</a>
+                </div>
+            </article>
+
             <article class="blog-card">
                 <div class="blog-image"><img src="https://images.unsplash.com/photo-1501785888041-af3ef285b470?w=1200&q=80&auto=format&fit=crop" alt="Kathmandu"></div>
                 <div class="blog-content" style="padding:1rem;">
@@ -62,6 +90,83 @@
                 <img src="https://images.unsplash.com/photo-1491553895911-0055eca6402d?w=800&q=80&auto=format&fit=crop" alt="travel3">
             </div>
         </div>
+
+        <!-- Article modal (reusable) -->
+        <div id="articleModal" class="modal" aria-hidden="true">
+            <div class="modal-backdrop"></div>
+            <div class="modal-dialog" role="dialog" aria-modal="true">
+                <button class="modal-close" aria-label="Close article">&times;</button>
+                <img class="modal-image" src="" alt="Article image" />
+                <h2 class="modal-title"></h2>
+                <div class="modal-meta"></div>
+                <div class="modal-body"></div>
+            </div>
+        </div>
+
+        <style>
+            .modal { position:fixed; inset:0; display:none; align-items:center; justify-content:center; z-index:2000; }
+            .modal[aria-hidden="false"] { display:flex; }
+            .modal-backdrop { position:fixed; inset:0; background:rgba(2,6,23,0.6); }
+            .modal-dialog { position:relative; max-width:780px; max-height:86vh; overflow:auto; background:var(--color-bg-primary); color:var(--color-text-primary); border-radius:10px; padding:1rem 1.25rem; box-shadow:0 20px 60px rgba(2,6,23,0.4); z-index:2100; }
+            .modal-image{ width:100%; height:300px; object-fit:cover; border-radius:8px; margin-bottom:.75rem; }
+            .modal-close { position:absolute; right:0.5rem; top:0.5rem; background:transparent; border:0; font-size:1.6rem; color:var(--color-text-primary); cursor:pointer; }
+            .modal-meta { color:var(--color-accent-primary); font-size:0.9rem; margin-bottom:0.5rem; }
+            .modal-body p{ line-height:1.6; margin-bottom:0.75rem; }
+        </style>
+
+        <script>
+            (function(){
+                const modal = document.getElementById('articleModal');
+                const modalImage = modal?.querySelector('.modal-image');
+                const modalTitle = modal?.querySelector('.modal-title');
+                const modalMeta = modal?.querySelector('.modal-meta');
+                const modalBody = modal?.querySelector('.modal-body');
+                const modalClose = modal?.querySelector('.modal-close');
+
+                function openArticle(card) {
+                    if(!modal) return;
+                    const title = card.querySelector('h3')?.innerText || 'Article';
+                    const date = card.querySelector('.muted')?.innerText || '';
+                    const img = card.querySelector('img')?.src || '';
+                    const summary = card.querySelector('p')?.innerText || '';
+
+                    modalTitle.textContent = title;
+                    modalMeta.textContent = date;
+                    if(img){ modalImage.src = img; modalImage.style.display = ''; } else { modalImage.style.display = 'none'; }
+
+                    modalBody.innerHTML = `
+                        <p>${summary}</p>
+                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer nec odio. Praesent libero. Sed cursus ante dapibus diam.</p>
+                        <p>Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus.</p>
+                        <p>Additional images and content can be added here.</p>
+                    `;
+
+                    modal.setAttribute('aria-hidden','false');
+                    document.body.classList.add('modal-open');
+                    modalClose?.focus();
+                }
+
+                function closeArticle(){
+                    if(!modal) return;
+                    modal.setAttribute('aria-hidden','true');
+                    document.body.classList.remove('modal-open');
+                }
+
+                document.addEventListener('click', function(e){
+                    const target = e.target;
+                    if(target.matches('.blog-link') || target.closest('.blog-link')){
+                        e.preventDefault();
+                        const link = target.closest('.blog-link') || target;
+                        const card = link.closest('.blog-card');
+                        if(card) openArticle(card);
+                    }
+                });
+
+                modalClose?.addEventListener('click', closeArticle);
+                modal?.addEventListener('click', function(e){ if(e.target.classList.contains('modal-backdrop')) closeArticle(); });
+                document.addEventListener('keydown', function(e){ if(e.key==='Escape') closeArticle(); });
+            })();
+        </script>
     </main>
 
     <script>

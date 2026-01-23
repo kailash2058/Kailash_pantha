@@ -45,12 +45,14 @@
         /* Mobile behavior */
         @media (max-width: 900px) {
             .nav-toggle { display:block; }
-            /* slide menu using transform for reliable behavior */
-            .nav-menu { position: fixed; right: 0; top: 0; height: 100vh; width: 280px; flex-direction: column; padding: 1.25rem; background: linear-gradient(180deg,var(--color-bg-primary),var(--color-bg-secondary)); box-shadow: -6px 0 24px rgba(35,38,41,0.07); gap:1rem; transition: transform .28s ease; transform: translateX(110%); z-index:1300; }
+            /* slide menu using transform for reliable behavior; hidden state is non-interactive */
+            .nav-menu { position: fixed; right: 0; top: 0; height: 100vh; width: 280px; flex-direction: column; padding: 1.25rem; background: linear-gradient(180deg,var(--color-bg-primary),var(--color-bg-secondary)); box-shadow: -6px 0 24px rgba(35,38,41,0.07); gap:1rem; transition: transform .28s ease, opacity .18s ease; transform: translateX(100%); opacity: 0; pointer-events: none; z-index:1300; }
             .dark-mode .nav-menu{ background: linear-gradient(180deg,#071124,#071a2a); }
-            .nav-menu.active { transform: translateX(0); }
+            .nav-menu.active { transform: translateX(0); opacity:1; pointer-events: auto; }
             /* nav close button placed at top-right above menu */
-            .nav-close { display:block; position: fixed; right: 0.5rem; top: 0.6rem; z-index:1500; background:transparent; padding:0.45rem; border-radius:6px; }
+            .nav-close { display:none; position: fixed; right: 0.5rem; top: 0.6rem; z-index:1500; background:transparent; padding:0.45rem; border-radius:6px; opacity:.98; }
+            /* show close button only when menu active (sibling selector) */
+            .nav-menu.active ~ .nav-close { display:block; }
             .nav-menu li { width:100%; }
             .nav-link { display:block; width:100%; padding:0.75rem 0.5rem; }
         }
@@ -460,10 +462,43 @@
                                 // remove internal <style> tags if any
                                 container.appendChild(node);
                             }
-                        })
-                        .catch(()=>{ container.innerHTML = '<p>Unable to load articles.</p>'; });
-                })();
-            </script>
+
+                            // attach delegated click handler to open the article modal from cloned cards
+                            const articleModal = document.getElementById('articleModal');
+                            const modalImage = articleModal?.querySelector('.modal-image');
+                            const modalTitle = articleModal?.querySelector('.modal-title');
+                            const modalMeta = articleModal?.querySelector('.modal-meta');
+                            const modalBody = articleModal?.querySelector('.modal-body');
+                            const modalClose = articleModal?.querySelector('.modal-close');
+
+                            container.addEventListener('click', function(e){
+                                const link = e.target.closest('.blog-link');
+                                if(!link) return;
+                                e.preventDefault();
+                                const card = link.closest('.blog-card');
+                                if(!card || !articleModal) return;
+                                const title = card.querySelector('h3')?.innerText || 'Article';
+                                const date = card.querySelector('.blog-date')?.innerText || card.querySelector('.muted')?.innerText || '';
+                                const category = card.querySelector('.blog-category')?.innerText || '';
+                                const img = card.querySelector('img')?.src || '';
+                                const summary = card.querySelector('p')?.innerText || '';
+
+                                modalTitle.textContent = title;
+                                modalMeta.textContent = [date, category].filter(Boolean).join(' — ');
+                                if(img){ modalImage.src = img; modalImage.style.display = ''; } else { modalImage.style.display = 'none'; }
+                                modalBody.innerHTML = `
+                                    <p>${summary}</p>
+                                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer nec odio. Praesent libero. Sed cursus ante dapibus diam.</p>
+                                    <p>Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus.</p>
+                                `;
+                                articleModal.setAttribute('aria-hidden','false');
+                                document.body.classList.add('modal-open');
+                                modalClose?.focus();
+                            });
+                 })
+                 .catch(()=>{ container.innerHTML = '<p>Unable to load articles.</p>'; });
+             })();
+         </script>
 
             <!-- small photo gallery preview -->
             <div style="margin-top:1rem;">
@@ -488,49 +523,37 @@
         <div class="container">
             <div class="section-label">EVENTS & WORKSHOPS</div>
             <h2 class="section-title">Events & Workshops — Journal</h2>
-            <div class="events-grid">
 
-                <div class="event-card">
-                    <div class="event-info">
-                        <h3>Web Development Workshop</h3>
-                        <p class="event-meta"><i class="fa-solid fa-calendar"></i> February 20, 2025 &nbsp; <i class="fa-solid fa-location-dot"></i> Tech Hub, Karachi</p>
-                        <p class="event-desc">Attended an interactive workshop focused on modern web development workflows, performance optimization, and component-driven UI. I led a short session on responsive patterns and received helpful feedback about accessibility improvements to include in production apps.</p>
-                        <div class="event-tags">
-                            <span>Highlights: responsive design, accessibility</span>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="event-card">
-                    <div class="event-info">
-                        <h3>JavaScript Fundamentals Bootcamp</h3>
-                        <p class="event-meta"><i class="fa-solid fa-calendar"></i> March 5, 2025 &nbsp; <i class="fa-solid fa-location-dot"></i> Innovation Center, Lahore</p>
-                        <p class="event-desc">A focused bootcamp covering core JavaScript concepts and practical exercises. I facilitated a hands-on debugging lab and documented common pitfalls for beginners — the session inspired improvements to my teaching style and examples for future workshops.</p>
-                        <div class="event-tags">
-                            <span>Highlights: teaching, debugging labs</span>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="event-card">
-                    <div class="event-info">
-                        <h3>AI & Machine Learning Seminar</h3>
-                        <p class="event-meta"><i class="fa-solid fa-calendar"></i> March 15, 2025 &nbsp; <i class="fa-solid fa-location-dot"></i> Tech Auditorium, Islamabad</p>
-                        <p class="event-desc">Attended talks on recent advances in model interpretability and edge deployment. I explored approaches for lightweight model compression and exchanged notes with researchers about deploying vision models on constrained devices.</p>
-                        <div class="event-tags">
-                            <span>Highlights: model interpretability, edge deployment</span>
-                        </div>
-                    </div>
-                </div>
-
+            <div class="events-grid" id="homeEventsGrid">
+                <!-- will be populated with first 3 .event-card elements from events_all -->
             </div>
 
-            <!-- No registration CTA: keep link to full events page for an archive or extended notes -->
+            <!-- No registration CTA: link to full events page for an archive or extended notes -->
             <div style="text-align:center; margin-top:1.25rem;">
                 <a href="{% url 'events_all' %}" class="btn btn-primary">View Event Archive</a>
             </div>
         </div>
     </section>
+
+    <script>
+        (function(){
+            const container = document.getElementById('homeEventsGrid');
+            if(!container) return;
+            const eventsUrl = "{% url 'events_all' %}";
+            fetch(eventsUrl, { credentials: 'same-origin' })
+                .then(r => r.text())
+                .then(html => {
+                    const parser = new DOMParser();
+                    const doc = parser.parseFromString(html, 'text/html');
+                    const cards = doc.querySelectorAll('.event-card');
+                    for(let i=0;i<Math.min(3,cards.length); i++){
+                        const node = cards[i].cloneNode(true);
+                        container.appendChild(node);
+                    }
+                })
+                .catch(()=>{ container.innerHTML = '<p>Unable to load events.</p>'; });
+        })();
+    </script>
 
     <!-- Contact Section -->
     <section id="contact" class="contact">
